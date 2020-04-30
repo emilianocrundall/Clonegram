@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block header %}
+<div class="header">
+    <a class="titulo" href="{% url 'fotos:home' %}">Clonegram</a>
+</div>
+{% endblock %}
+{% block content %}
+<div class="editform">
+    <form id="post_form" class="custom-form" enctype="multipart/form-data" novalidate="">
+        {% csrf_token %}
+        <h3>Subir Foto</h3>
+        <div class="form-group text-center pt-2">
+            <input type="file" name="post" id="custom_input">
+            <label for="custom_input"><span id="span">Elegir Foto</span></label>
+        </div>
+        <div class="form-group text-center">
+            <input type="text" placeholder="Pie de foto" name="pie">
+        </div>
+        <div class="form-group text-center">
+            <button type="submit" class="btn-full" id="submit_post">Subir</button>
+            <div class="error2" style="width: 40%; margin: auto; padding: 4px;">
+                <div class="errores"></div>
+            </div>
+            
+        </div>
+    </form>
+</div>
+{% endblock %}

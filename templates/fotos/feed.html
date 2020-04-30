@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="feed">
+    {% for post in posts %}
+        <div class="post_details">
+            <div class="user_info_re">
+                <div class="user_re">
+                    <a class="link_user" href="{% url 'usuario:user_profile' post.usuario.id %}">
+                        {% if post.usuario.foto_perfil %}
+                            <img class="circle3" src={% if post.usuario.foto_perfil %}'{{ post.usuario.foto_perfil.url }}'{% endif %} alt="">
+                            {{ post.usuario.username }}
+                        {% else %}
+                            <i class="fas fa-user"></i>
+                            {{ post.usuario.username }}
+                        {% endif %}
+                    </a>
+                </div>   
+            </div>
+            <img src={% if post.imagen %}'{{ post.imagen.url }}'{% endif %} alt="">
+            <div class="comments" id="pub_comment">
+                <div class="user">
+                    <a class="link_user" href="{% url 'usuario:user_profile' post.usuario.id %}">
+                        {% if post.usuario.foto_perfil %}
+                            <img class="circle3" src={% if post.usuario.foto_perfil %}'{{ post.usuario.foto_perfil.url }}'{% endif %} alt="">
+                            {{ post.usuario.username }}
+                        {% else %}
+                            <i class="fas fa-user"></i>
+                            {{ post.usuario.username }}
+                        {% endif %}
+                    </a>
+                </div>
+                <div class="details">
+                    <p class="mini">{{ post.fecha }}</p>
+                    <p><strong>{{ post.usuario.username }}</strong>. {{ post.pie }}</p>
+                    <a href="{% url 'fotos:comentarios_re' post.id %}" class="btn-3 ver_cmm">Ver comentarios</a>
+                </div>
+                <div class="caja_comments">
+                    <p class="mini">{{ post.fecha }}</p>
+                    <p><strong>{{ post.usuario.username }}</strong>. {{ post.pie }}</p>
+                    <div class="new_comment"></div>
+                    {% if post.comments %}
+                        {% for comentario in post.comments %}
+                            <div class="comentario_">
+                                <p class="mini">{{ comentario.fecha }}</p>
+                                {% if comentario.user.username == request.user.username %}
+                                    <a href="{% url 'usuario:user_home' %}">
+                                        <strong>{{ request.user.username }}</strong>
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'usuario:user_profile' comentario.user.id %}">
+                                        <strong>{{ comentario.user.username }}</strong>
+                                    </a>
+                                {% endif %}
+                                <p>{{ comentario.texto }}</p>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="likes">
+                    <a data-url="{% url 'fotos:like' post.id %}" class="open_modal">{{ post.num_likes }} <i class="fas fa-heart"></i></a>
+                    <div class="forms">
+                        <form class="pub_form" id="like">
+                            {% csrf_token %}
+                            {% if post.is_liked %}
+                                <button value="{{ post.id }}" class="btn-3 like liked" id="liked"><i class="fas fa-heart"></i></button>
+                                <button value="{{ post.id }}" style="display: none;" class="btn-3 like deleted" id="unliked"><i class="far fa-heart"></i></button>
+                            {% else %}
+                                <button value="{{ post.id }}" class="btn-3 like deleted" id="unliked"><i class="far fa-heart"></i></button>
+                                <button value="{{ post.id }}" style="display: none;" class="btn-3 like liked" id="liked"><i class="fas fa-heart"></i></button>
+                            {% endif %}
+                        </form>
+                        <form class="pub_form" id="save">
+                            {% csrf_token %}
+                            {% if request.user in post.guardar.all %}
+                                <button value="{{ post.id }}" class="btn-3 guardar saved" id="saved"><i class="fas fa-bookmark"></i></button>
+                                <button value="{{ post.id }}" style="display: none" class="btn-3 guardar removed" id="removed"><i class="far fa-bookmark"></i></button>
+                            {% else %}
+                                <button value="{{ post.id }}" class="btn-3 guardar removed" id="removed"><i class="far fa-bookmark"></i></button>
+                                <button value="{{ post.id }}" style="display: none;" class="btn-3 guardar saved" id="saved"><i class="fas fa-bookmark"></i></button>
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+                <div class="comentar">
+                    <form id="comentar_form">
+                        {% csrf_token %}
+                        <input class="input_pub" type="text" name="comentario" placeholder="Comentar...">
+                        <button value="{{ post.id }}" id="comentar" class="btn-full2 cmt"><i class="fas fa-angle-right"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="post_info">
+                <p><strong>{{ post.usuario.username }}</strong>. {{ post.pie }}</p>
+                <a href="{% url 'fotos:comentarios_re' post.id %}" class="btn-3 ver_cmm">Ver comentarios</a>
+                <a data-url="{% url 'fotos:like' post.id %}" class="open_modal">{{ post.num_likes }} <i class="fas fa-heart"></i></a>
+                <div class="forms_re">
+                    <form class="pub_form" id="like">
+                        {% csrf_token %}
+                        {% if post.is_liked %}
+                            <button value="{{ post.id }}" class="btn-3 like liked" id="liked"><i class="fas fa-heart"></i></button>
+                            <button value="{{ post.id }}" style="display: none;" class="btn-3 like deleted" id="unliked"><i class="far fa-heart"></i></button>
+                        {% else %}
+                            <button value="{{ post.id }}" class="btn-3 like deleted" id="unliked"><i class="far fa-heart"></i></button>
+                            <button value="{{ post.id }}" style="display: none;" class="btn-3 like liked" id="liked"><i class="fas fa-heart"></i></button>
+                        {% endif %}
+                    </form>
+                    <form class="pub_form" id="save">
+                        {% csrf_token %}
+                        {% if request.user in post.guardar.all %}
+                            <button value="{{ post.id }}" class="btn-3 guardar saved" id="saved"><i class="fas fa-bookmark"></i></button>
+                            <button value="{{ post.id }}" style="display: none" class="btn-3 guardar removed" id="removed"><i class="far fa-bookmark"></i></button>
+                        {% else %}
+                            <button value="{{ post.id }}" class="btn-3 guardar removed" id="removed"><i class="far fa-bookmark"></i></button>
+                            <button value="{{ post.id }}" style="display: none;" class="btn-3 guardar saved" id="saved"><i class="fas fa-bookmark"></i></button>
+                        {% endif %}
+                    </form>
+                </div>
+                
+            </div>
+        </div>   
+    {% endfor %}
+</div>
+<div class="modal-div"></div>
+{% endblock %}

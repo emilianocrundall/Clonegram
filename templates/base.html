@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <title>Clonegram</title>
+</head>
+<body>
+    {% block header %}
+    <div class="header">
+        <a class="titulo" href="{% url 'fotos:home' %}">Clonegram</a>
+        <form id="buscar">
+            <input class="s_input" type="text" placeholder="Buscar usuarios" id="buscar_input" name="usuario">
+        </form>
+        <div class="results">
+        </div>
+        <div class="links">
+            <a href="{% url 'fotos:home' %}"><i class="fas fa-home"></i></a>
+            <a href="{% url 'fotos:ntc' %}"><i class="fas fa-bell"></i></a>
+            {% if request.user.is_authenticated %}
+                {% if request.user.foto_perfil %}
+                    <a href="{% url 'usuario:user_home' %}">
+                        <img class="circle3" src={% if request.user.foto_perfil %}'{{ request.user.foto_perfil.url }}'{% endif %} alt="">
+                    </a>
+                {% else %}
+                    <a href="{% url 'usuario:user_home' %}"><i class="fas fa-user"></i></a>
+                {% endif %}
+            {% endif %}
+            <button data-toggle="modal" data-target="#modal_actions" id="actions"><i class="fas fa-sort-down"></i></button>
+        </div>
+    </div>
+    <div class="modal fade" id="modal_actions" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" id="modal">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100" id="modaltit">{{ request.user.username }}</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body mx-3" id="control">
+                    <div class="md-form mb-2 d-flex">
+                        <a class="link_user" href="{% url 'usuario:editar' request.user.id %}">
+                            Editar Perfil
+                        </a>
+                    </div>
+                    <div class="md-form mb-2 d-flex">
+                        <a class="link_user" href="{% url 'fotos:saved' %}">
+                            Ver elementos guardados
+                        </a>
+                    </div>
+                    <div class="md-form mb-2 d-flex">
+                        <a class="link_user" href="{% url 'logout' %}">
+                            Salir
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="header_re">
+        <div class="links_re">
+            <a href="{% url 'fotos:home' %}"><i class="fas fa-home"></i></a>
+            <a href="{% url 'fotos:buscar' %}"><i class="fas fa-search"></i></a>
+            <a href=""><i class="fas fa-bell"></i></a>
+            <button data-toggle="modal" data-target="#modal_actions" id="actions" class="btn-3"><i class="fas fa-sort-down"></i></button>
+            {% if request.user.is_authenticated %}
+                {% if request.user.foto_perfil %}
+                    <a href="{% url 'usuario:user_home' %}">
+                        <img class="circle3" src={% if request.user.foto_perfil %}'{{ request.user.foto_perfil.url }}'{% endif %} alt="">
+                    </a>
+                {% else %}
+                    <a href="{% url 'usuario:user_home' %}"><i class="fas fa-user"></i></a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    {% endblock %}
+    {% block content %}
+    
+    {% endblock %}
+    {% block footer %}
+    <div class="footer">
+        <h4>Clonegram</h4>
+        <p>© 2020, Clonegram. Todos los derechos reservados</p>
+    </div>
+    {% endblock %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="{% static 'js/codigo.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="publicaciones">
+    <h2>Elementos guardados</h2>
+    {% if posts %}
+        {% for foto in posts %}
+            <div class="listado">
+                <a href="{% url 'fotos:pub_detalles' foto.id %}">
+                    <img src={% if foto.imagen %}'{{ foto.imagen.url }}'{% endif %} alt="">
+                </a>
+            </div>
+        {% endfor %}
+    {% else %}
+    <div style="padding:50px 10px 50px 10px;">
+        <h1>No hay publicaciones por el momento</h1>
+    </div>
+    {% endif %}
+    <div class="explorar_mas">
+        <a class="btn-3" href="{% url 'fotos:home' %}">Explorar mas publicaciones</a>
+    </div>
+</div>
+
+{% endblock %}

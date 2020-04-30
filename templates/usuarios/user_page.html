@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="header2">
+    {% if not usuario.foto_perfil %}
+        <div class="circle"><i class="fas fa-user"></i></div>
+    {% else %}
+        <img class="circle2" src={% if usuario.foto_perfil %}'{{ usuario.foto_perfil.url }}'{% endif %} alt="">
+    {% endif %}
+    <h1>{{ usuario.username }}</h1>
+    <div class="follow">
+        <form id="follow_form">
+            {% csrf_token %}
+            {% if following %}
+                <button value="{{ usuario.id }}" type="submit" id="unfollow" class="btnfollow"><i class="fas fa-user-check"></i></button>
+                <button style="display: none;" value="{{ usuario.id }}" type="submit" id="follow" class="btnfollow">Seguir</button>
+            {% else %}
+                <button value="{{ usuario.id }}" type="submit" id="follow" class="btnfollow">Seguir</button>
+                <button style="display: none;" value="{{ usuario.id }}" type="submit" id="unfollow" class="btnfollow"><i class="fas fa-user-check"></i></button>
+            {% endif %}
+        </form>
+    </div>
+    <h4>{{ usuario.first_name }} {{ usuario.last_name }}</h4>
+    {% if usuario.bio %}
+        <p>{{ usuario.bio }}</p>
+    {% endif %}
+    <div class="follows">
+        <button data-toggle="modal" data-target="#modalfollowing" class="following">{{ usuario.count_following }} Seguidos</button>
+        <button data-toggle="modal" data-target="#modalfollowers" class="followers">{{ usuario.count_followers }} Seguidores</button>
+    </div>
+</div>
+<div class="publicaciones">
+    <h2>Publicaciones</h2>
+    {% if fotos %}
+        {% for foto in fotos %}
+            <div class="listado">
+                <a href="{% url 'fotos:pub_detalles' foto.id %}">
+                    <img src={% if foto.imagen %}'{{ foto.imagen.url }}'{% endif %} alt="">
+                </a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <h1>No hay publicaciones por el momento</h1>
+    {% endif %}
+</div>
+<div class="modal fade" id="modalfollowers" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="modal">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100" id="modaltit">Seguidores</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-3" id="control">
+                {% for follower in usuario.followers.all %}
+                    {% if follower == request.user %}
+                        {% if follower.foto_perfil %}
+                            <div class="md-form mb-2 d-flex justify-content-center">
+                                <a class="link_user" href="{% url 'usuario:user_home' %}">
+                                    <img class="circle3" src={% if follower.foto_perfil %}'{{ follower.foto_perfil.url }}'{% endif %} alt="">
+                                    {{ follower.username }}
+                                </a>
+                            </div>
+                        {% else %}
+                            <div class="md-form mb-2 d-flex justify-content-center">
+                                <a class="link_user" href="{% url 'usuario:user_home' %}">
+                                    <i class="fas fa-user"></i>
+                                    {{ follower.username }}
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        {% if follower.foto_perfil %}
+                            <div class="md-form mb-2 d-flex justify-content-center">
+                                <a class="link_user" href="{% url 'usuario:user_profile' follower.id %}">
+                                    <img class="circle3" src={% if follower.foto_perfil %}'{{ follower.foto_perfil.url }}'{% endif %} alt="">
+                                    {{ follower.username }}
+                                </a>
+                            </div>
+                        {% else %}
+                            <div class="md-form mb-2 d-flex justify-content-center">
+                                <a class="link_user" href="{% url 'usuario:user_profile' follower.id %}">
+                                    <i class="fas fa-user"></i>
+                                    {{ follower.username }}
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalfollowing" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="modal">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100" id="modaltit">Siguiendo</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-3" id="control">
+                {% for follower in usuario.following.all %}
+                    {% if follower == request.user %}
+                        {% if follower.foto_perfil %}
+                            <div class="md-form mb-2 d-flex justify-content-center">
+                                <a class="link_user" href="{% url 'usuario:user_home' %}">
+                                    <img class="circle3" src={% if follower.foto_perfil %}'{{ follower.foto_perfil.url }}'{% endif %} alt="">
+                                    {{ follower.username }}
+                                </a>
+                            </div>
+                        {% else %}
+                            <div class="md-form mb-2 d-flex justify-content-center">
+                                <a class="link_user" href="{% url 'usuario:user_home' %}">
+                                    <i class="fas fa-user"></i>
+                                    {{ follower.username }}
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        {% if follower.foto_perfil %}
+                            <div class="md-form mb-2 d-flex justify-content-center">
+                                <a class="link_user" href="{% url 'usuario:user_profile' follower.id %}">
+                                    <img class="circle3" src={% if follower.foto_perfil %}'{{ follower.foto_perfil.url }}'{% endif %} alt="">
+                                    {{ follower.username }}
+                                </a>
+                            </div>
+                        {% else %}
+                            <div class="md-form mb-2 d-flex justify-content-center">
+                                <a class="link_user" href="{% url 'usuario:user_profile' follower.id %}">
+                                    <i class="fas fa-user"></i>
+                                    {{ follower.username }}
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

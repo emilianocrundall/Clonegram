@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="re" id="pub_comment">
+    <div class="caja_comments" >
+        <div class="post_info_re_comment">
+            <p class="mini">{{ post.fecha }}</p>
+            <p><strong>{{ post.usuario.username }}</strong>. {{ post.pie }}</p>
+        </div>
+            <div class="new_comment"></div>
+        {% if post.comments %}
+            {% for comentario in post.comments %}
+                <div class="comentario_">
+                    <p class="mini">{{ comentario.fecha }}</p>
+                    {% if comentario.user.username == request.user.username %}
+                        <a href="{% url 'usuario:user_home' %}">
+                            <strong>{{ request.user.username }}</strong>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'usuario:user_profile' comentario.user.id %}">
+                            <strong>{{ comentario.user.username }}</strong>
+                        </a>
+                    {% endif %}
+                    <p>{{ comentario.texto }}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="comentar">
+        <form id="comentar_form">
+            {% csrf_token %}
+            <input class="input_pub" type="text" name="comentario" placeholder="Comentar...">
+            <button value="{{ post.id }}" id="comentar" class="btn-full2 cmt">Subir</button>
+        </form>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

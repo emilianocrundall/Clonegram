@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block header %}
+{% endblock %}
+
+{% block content %}
+<div class="pub_detalles">
+    <div class="info_re">
+        <div class="user_">
+            {% if foto.usuario == request.user %}
+                <a class="link_user" href="{% url 'usuario:user_home' %}">
+                    {% if request.user.foto_perfil %}
+                        <img class="circle3" src={% if request.user.foto_perfil %}'{{ request.user.foto_perfil.url }}'{% endif %} alt="">
+                        {{ request.user.username }}
+                    {% else %}
+                        <i class="fas fa-user"></i>
+                        {{ request.user.username }}
+                    {% endif %}
+                </a>
+            {% else %}
+            <a class="link_user" href="{% url 'usuario:user_profile' foto.usuario.id %}">
+                {% if foto.usuario.foto_perfil %}
+                    <img class="circle3" src={% if foto.usuario.foto_perfil %}'{{ foto.usuario.foto_perfil.url }}'{% endif %} alt="">
+                    {{ foto.usuario.username }}
+                {% else %}
+                    <i class="fas fa-user"></i>
+                    {{ foto.usuario.username }}
+                {% endif %}
+            </a>
+            {% endif %}
+        </div>
+        <p><i class="fas fa-calendar"></i> {{ foto.fecha }}</p>
+    </div>
+    <div class="foto">
+        <div class="img_info">
+            <img src={% if foto.imagen %}'{{ foto.imagen.url }}'{% endif %} alt="">
+        </div>
+        <div class="likes_">
+            <a data-url="{% url 'fotos:like' foto.id %}" class="open_modal">{{ num_likes }} <i class="fas fa-heart"></i></a>
+        </div>
+        <div class="forms_">
+            <form class="pub_form" id="like">
+                {% csrf_token %}
+                {% if is_liked %}
+                    <button value="{{ foto.id }}" class="btn-3 like liked" id="liked"><i class="fas fa-heart"></i></button>
+                    <button value="{{ foto.id }}" style="display: none;" class="btn-3 like deleted" id="unliked"><i class="far fa-heart"></i></button>
+                {% else %}
+                    <button value="{{ foto.id }}" class="btn-3 like deleted" id="unliked"><i class="far fa-heart"></i></button>
+                    <button value="{{ foto.id }}" style="display: none;" class="btn-3 like liked" id="liked"><i class="fas fa-heart"></i></button>
+                {% endif %}
+            </form>
+            <form class="pub_form" id="save">
+                {% csrf_token %}
+                {% if is_saved %}
+                    <button value="{{ foto.id }}" class="btn-3 guardar saved" id="saved"><i class="fas fa-bookmark"></i></button>
+                    <button value="{{ foto.id }}" style="display: none" class="btn-3 guardar removed" id="removed"><i class="far fa-bookmark"></i></button>
+                {% else %}
+                    <button value="{{ foto.id }}" class="btn-3 guardar removed" id="removed"><i class="far fa-bookmark"></i></button>
+                    <button value="{{ foto.id }}" style="display: none;" class="btn-3 guardar saved" id="saved"><i class="fas fa-bookmark"></i></button>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+    <div class="comentarios" id="pub_comment">
+        <div class="info">
+            <div class="user_">
+                {% if foto.usuario == request.user %}
+                    <a class="link_user" href="{% url 'usuario:user_home' %}">
+                        {% if request.user.foto_perfil %}
+                            <img class="circle3" src={% if request.user.foto_perfil %}'{{ request.user.foto_perfil.url }}'{% endif %} alt="">
+                            {{ request.user.username }}
+                        {% else %}
+                            <i class="fas fa-user"></i>
+                            {{ request.user.username }}
+                        {% endif %}
+                    </a>
+                {% else %}
+                <a class="link_user" href="{% url 'usuario:user_profile' foto.usuario.id %}">
+                    {% if foto.usuario.foto_perfil %}
+                        <img class="circle3" src={% if foto.usuario.foto_perfil %}'{{ foto.usuario.foto_perfil.url }}'{% endif %} alt="">
+                        {{ foto.usuario.username }}
+                    {% else %}
+                        <i class="fas fa-user"></i>
+                        {{ foto.usuario.username }}
+                    {% endif %}
+                </a>
+                {% endif %}
+            </div>
+            <p><i class="fas fa-calendar"></i> <strong>{{ foto.fecha }}</strong></p>
+        </div>
+        <div class="comentarios_users">
+            <p><strong>{{ foto.usuario.username }}</strong>. {{ foto.pie }}</p>
+            <div class="new_comment"></div>
+            {% if comentarios %}
+                {% for comentario in comentarios %}
+                    <div class="comentario_">
+                        <p class="mini">{{ comentario.fecha }}</p>
+                        {% if comentario.user.username == request.user.username %}
+                            <a href="{% url 'usuario:user_home' %}">
+                                <strong>{{ request.user.username }}</strong>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'usuario:user_profile' comentario.user.id %}">
+                                <strong>{{ comentario.user.username }}</strong>
+                            </a>
+                        {% endif %}
+                        <p>{{ comentario.texto }}</p>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="comentar2">
+            <form id="comentar_form">
+                {% csrf_token %}
+                <input class="input_pub" type="text" name="comentario" placeholder="Comentar...">
+                <button value="{{ foto.id }}" id="comentar" class="btn-full2 cmt">Subir</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal-div"></div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

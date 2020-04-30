@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block header %}
+<div class="header_re">
+    <div class="links_re">
+        <a href="{% url 'fotos:home' %}"><i class="fas fa-home"></i></a>
+        <a href="{% url 'fotos:buscar' %}"><i class="fas fa-search"></i></a>
+        <a href=""><i class="fas fa-bell"></i></a>
+        <button data-toggle="modal" data-target="#modal_actions" id="actions" class="btn-3"><i class="fas fa-sort-down"></i></button>
+        {% if request.user.is_authenticated %}
+            {% if request.user.foto_perfil %}
+                <a href="{% url 'usuario:user_home' %}">
+                    <img class="circle3" src={% if request.user.foto_perfil %}'{{ request.user.foto_perfil.url }}'{% endif %} alt="">
+                </a>
+            {% else %}
+                <a href="{% url 'usuario:user_home' %}"><i class="fas fa-user"></i></a>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+{% block content %}
+
+<div class="busquedas">
+    <form id="buscar">
+        <input class="s_input" type="text" placeholder="Buscar usuarios" id="buscar_input" name="usuario">
+    </form>
+    <div class="results"></div>
+</div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block header %}
+{% endblock %}
+{% block content %}
+<div class="contenedor">
+    <div class="presentacion">
+        <i class="fas fa-camera"></i>
+        <h1>CloneGram</h1>
+    </div>
+    <div class="form">
+        <h3>Registrarse</h3>
+        <form class="custom-form" id="register_form">
+            {% csrf_token %}
+            <div class="form-group text-center pt-2">
+                <input type="text" placeholder="Nombre de usuario" name="username">
+            </div>
+            <div class="form-group text-center">
+                <input type="text" placeholder="Nombre" name="nombre">
+            </div>
+            <div class="form-group text-center">
+                <input type="text" placeholder="Apellido" name="apellido">
+            </div>
+            <div class="form-group text-center">
+                <input type="text" placeholder="Email" name="email">
+            </div>
+            <div class="form-group text-center">
+                <input type="password" placeholder="Contraseña" name="password">
+            </div>
+            <div class="form-group text-center">
+                <input type="password" placeholder="Confirmar contraseña" name="password2">
+            </div>
+            <div class="form-group text-center">
+                <button class="btn-full" id="submit_register">Ingresar</button>
+                <div class="errores"></div>
+            </div>
+        </form>
+        <div class="cuenta">
+            <a href="{% url 'usuario:login_home' %}">Ya tienes cuenta? Haz click aqui</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block footer %}
+{% endblock %}

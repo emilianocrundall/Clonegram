@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block header %}
+<div class="header">
+    <a class="titulo" href="{% url 'fotos:home' %}">Clonegram</a>
+</div>
+{% endblock %}
+{% block content %}
+<div class="editform">
+    <form method="POST" class="custom-form" action="{% url 'usuario:editar' request.user.id %}" enctype="multipart/form-data" novalidate="">
+        {% csrf_token %}
+        <h3>Actualizar informacion</h3>
+        <div class="form-group text-center pt-2">
+            {{ form.foto_perfil }}
+        </div>
+        <div class="form-group text-center">
+            {{ form.username }}
+        </div>
+        <div class="form-group text-center">
+            {{ form.first_name }}
+        </div>
+        <div class="form-group text-center">
+            {{ form.last_name }}
+        </div>
+        <div class="form-group text-center">
+            {{ form.bio }}
+        </div>
+        <div class="form-group text-center">
+            <button type="submit" class="btn-full" id="submit_edit">Guardar</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+

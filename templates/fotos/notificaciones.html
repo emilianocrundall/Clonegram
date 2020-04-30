@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="ntc">
+    {% if notificaciones %}
+        {% for ntc in notificaciones %}
+        {% if ntc.post_id %}
+            <div class="notificacion">
+                <p>{{ ntc.fecha }}</p>
+                <a href="{% url 'fotos:pub_detalles' ntc.post_id %}">
+                    <p><strong>{{ ntc.f_user }}</strong> {{ ntc.texto }}</p>
+                </a>
+            </div>
+        {% else %}
+            <div class="notificacion">
+                <p>{{ ntc.fecha }}</p>
+                <a href="{% url 'usuario:user_profile' ntc.f_user.id %}">
+                    <p><strong>{{ ntc.f_user }}</strong> {{ ntc.texto }}</p>
+                </a>
+            </div>
+        {% endif %}
+        {% endfor %}
+    {% else %}
+    <div class="n_ntc">
+        <h2>No hay notificaciones por el momento</h2>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

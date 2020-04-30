@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block header %}
+{% endblock %}
+{% block content %}
+<div class="contenedor">
+    <div class="presentacion">
+        <i class="fas fa-camera"></i>
+        <h1>CloneGram</h1>
+    </div>
+    <div class="presentacion_re">
+        <h1>Clonegram</h1>
+    </div>
+    <div class="form">
+        <div class="pad" style="padding-top: 100px;"></div>
+        <h3>Loguearse</h3>
+        <form class="custom-form" id="login_form">
+            {% csrf_token %}
+            <div class="form-group text-center pt-2">
+                <input type="text" placeholder="Nombre de usuario" name="username">
+            </div>
+            <div class="form-group text-center">
+                <input type="password" placeholder="Contraseña" name="password">
+            </div>
+            <div class="form-group text-center">
+                <button type="submit" class="btn-full" id="submit_login">Ingresar</button>
+                <div class="errores"></div>
+            </div>
+        </form>
+        <div class="cuenta">
+            <a href="{% url 'usuario:registrarse_home' %}">No tienes cuenta? Haz click aqui</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block footer %}
+{% endblock %}
